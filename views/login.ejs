@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Login</title>
+  <style>
+    /* Estilos CSS */
+  </style>
+</head>
+
+<body>
+  <h1>Login</h1>
+  <form id="loginForm">
+    <label for="email">Email:</label>
+    <input type="email" id="email" required>
+    <label for="password">Senha:</label>
+    <input type="password" id="password" required>
+    <button type="submit">Entrar</button>
+    <a href="/register">não tem cadastro? clique aqui</a>
+  </form>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      fetch('/api/users/authenticate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data); // Exibe a resposta da API no console
+          if (data.success) {
+            alert('Usuário autenticado com sucesso!');
+            // Redireciona para a página principal após o login
+            window.location.href = 'index.html';
+          } else {
+            alert('Erro ao autenticar usuário!');
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          alert('Erro ao autenticar usuário!');
+        });
+    });
+  </script>
+</body>
+
+</html>

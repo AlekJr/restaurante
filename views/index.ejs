@@ -1,0 +1,106 @@
+<!-- index.ejs -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Gerenciamento de Pedidos</title>
+</head>
+
+<body>
+  <h1>Gerenciamento de Pedidos</h1>
+
+  <!-- Formulário para criar um novo pedido -->
+  <h2>Novo Pedido</h2>
+  <form id="createOrderForm" method="POST" action="/orders">
+    <label for="userId">ID do Usuário:</label>
+    <input type="text" id="userId" name="userId" required>
+    <label for="items">Itens:</label>
+    <textarea id="items" name="items" required></textarea>
+    <label for="total">Total:</label>
+    <input type="number" id="total" name="total" required>
+    <button type="submit">Criar Pedido</button>
+  </form>
+
+  <!-- Tabela para exibir os pedidos -->
+  <h2>Pedidos</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Usuário</th>
+        <th>Itens</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% orders.forEach((order)=> { %>
+        <tr>
+          <td>
+            <%= order.id %>
+          </td>
+          <td>
+            <%= order.userId %>
+          </td>
+          <td>
+            <%= order.items %>
+          </td>
+          <td>
+            <%= order.total %>
+          </td>
+          <td>
+            <%= order.status %>
+          </td>
+          <td>
+            <form method="POST" action="/orders/<%= order.id %>/update">
+              <select name="status">
+                <option value="pendente">Pendente</option>
+                <option value="em preparação">Em Preparação</option>
+                <option value="pronto">Pronto</option>
+              </select>
+              <button type="submit">Atualizar</button>
+            </form>
+            <form method="POST" action="/orders/<%= order.id %>/delete">
+              <button type="submit">Excluir</button>
+            </form>
+          </td>
+        </tr>
+        <% }); %>
+    </tbody>
+  </table>
+
+  <script>
+    document.getElementById('createOrderForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const userId = document.getElementById('userId').value;
+      const items = document.getElementById('items').value;
+      const total = document.getElementById('total').value;
+
+      fetch('/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userId,
+          items,
+          total
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data); // Exibe a resposta da API no console
+          window.location.reload(); // Recarrega a página após criar o pedido
+        })
+        .catch(error => {
+          console.error(error);
+          alert('Erro ao criar o pedido!');
+        });
+    });
+  </script>
+</body>
+
+</html>

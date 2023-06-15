@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Cardápio</title>
+</head>
+
+<body>
+  <h1>Cardápio</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Preço</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% menuItems.forEach((menuItem)=> { %>
+        <tr>
+          <td>
+            <%= menuItem.name %>
+          </td>
+          <td>
+            <%= menuItem.description %>
+          </td>
+          <td>
+            <%= menuItem.price %>
+          </td>
+        </tr>
+        <% }); %>
+    </tbody>
+  </table>
+</body>
+
+</html>
